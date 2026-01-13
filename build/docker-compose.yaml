@@ -1,0 +1,44 @@
+services:
+#  app:
+#    env_file:
+#      - ../build/.env
+#    build:
+#      context: ..
+#      dockerfile: build/Dockerfile
+#    container_name: web_app
+#    command: uvicorn main:main --host 0.0.0.0 --port ${APP_PORT:-8080} --reload
+#    ports:
+#      - "8080:${APP_PORT:-8080}"
+#    networks:
+#      - app_net
+#    depends_on:
+#      db:
+#        condition: service_healthy
+
+  db:
+    env_file:
+      - ../build/.env
+    image: postgres:16-alpine
+    container_name: db_app
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:${DB_PORT:-5432}"
+#    networks:
+#      - app_net
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER} -d ${DB_NAME}'"]
+      interval: 3s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - bdata:/var/lib/postgresql/data
+
+volumes:
+  bdata:
+
+#networks:
+#  app_net:
+#    driver: bridge
