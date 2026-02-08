@@ -12,7 +12,6 @@ class Info(str, Enum):
     item_id_info = 'Info of ID item'
     item_create = 'Create item'
     item_delete = 'Delete item'
-    items_delete = 'Delete of all item'
     item_put = 'Change an existing item with ID'
 
 categories: List[str] = ['Home', 'School', 'College']

@@ -19,7 +19,8 @@ async def lifespan(app: FastAPI):
 container.wire(
     modules=[
         "infrastructure.databases.postgresql.session.session",
-        "api.v1.item.dependencies"
+        "api.v1.item.dependencies",
+        "api.v1.user.dependencies"
     ]
 )
 
