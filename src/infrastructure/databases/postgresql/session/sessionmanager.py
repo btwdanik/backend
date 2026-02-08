@@ -12,19 +12,24 @@ class DatabaseSessionManager:
     async def init(self, base_url: str):
         self._engine = create_async_engine(base_url)
         self._session = async_sessionmaker(autocommit=False, bind=self._engine, expire_on_commit=False)
+
         if self._session is None:
             raise Exception("INFO:     DatabaseSessionManager is not initialized")
         else:
             print('INFO:     DatabaseSessionManager is initialized')
-            await self.create_tables()
-            print("INFO:     Tables created")
+
+            try:
+                await self.create_tables()
+                print("INFO:     Tables created")
+            except Exception:
+                raise Exception("Error, Tables creation failed")
 
     async def close(self) -> None:
         if self._engine is None:
             raise Exception("INFO:     DatabaseSessionManager is not initialized")
 
         # await self.delete_tables()
-        # print("INFO:    Tables deleted")
+        # print("INFO:    Tables deleted") # drop all base, when you leave
 
         await self._engine.dispose()
         self._engine = None

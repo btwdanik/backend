@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 from api.v1.routers import router
 from container import Container
+
 container = Container()
 
 @asynccontextmanager
