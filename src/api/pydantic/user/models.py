@@ -1,6 +1,4 @@
 from pydantic import BaseModel, EmailStr
-from sqlalchemy.orm import Mapped
-
 
 class UserSchema(BaseModel):
     username: str
@@ -12,11 +10,8 @@ class UserSchemaResponse(BaseModel):
     username: str
     email: EmailStr
 
-class UserSchemaLogin(BaseModel):
-    username: str
-    password: str
-
 class UserSchemaAccessToken(BaseModel):
+    id: int
     sub: str
 
 class UserSchemaRefreshToken(BaseModel):

@@ -12,6 +12,7 @@ ALGORITHM = os.getenv("ALGORITHM")
 
 def create_access_token(schema: UserSchemaAccessToken) -> str:
     payload = {
+        "id": schema.id,
         "sub": schema.sub,
         "exp": datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TTL_MIN),
         "iat": datetime.now(timezone.utc),
