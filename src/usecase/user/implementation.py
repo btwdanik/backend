@@ -1,5 +1,7 @@
+from fastapi.security import OAuth2PasswordRequestForm
+
 from .abstract import AbstractCreateUserUC
-from api.pydantic.user.models import UserSchema, UserSchemaLogin
+from api.pydantic.user.models import UserSchema
 
 class PostgreSQLCreateUserUC(AbstractCreateUserUC):
     def __init__(self, uow):
@@ -10,7 +12,7 @@ class PostgreSQLCreateUserUC(AbstractCreateUserUC):
             user = await uow.repository.create_user(schema)
         return user
 
-    async def login(self, schema: UserSchemaLogin):
+    async def login(self, schema: OAuth2PasswordRequestForm):
         async with self._uow as uow:
             user = await uow.repository.login_user(schema)
         return user
