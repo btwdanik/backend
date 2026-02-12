@@ -6,7 +6,7 @@ class Pagination(BaseModel):
     limit: int = Field(10, le=100)
     offset: int = Field(0, ge=0)
 
-categories: List[str] = ['Home', 'School', 'College']
+categories: List[str] = ['home', 'school', 'college']
 
 class ItemSchemaResponse(BaseModel):
     id: int
@@ -32,7 +32,7 @@ class ItemSchema(BaseModel):
     @field_validator('category')
     @classmethod
     def validate_category(cls, v : str):
-        if v in categories:
+        if v.lower() in categories:
             return v
         else:
             raise HTTPException(status_code=400, detail=f"Invalid category")
