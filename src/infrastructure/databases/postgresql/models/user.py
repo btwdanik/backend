@@ -6,9 +6,8 @@ from infrastructure.databases.postgresql.session.base import Base
 
 class User(Base):
     __tablename__ = "user"
-
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    username: Mapped[str] = mapped_column(String(30))
+    username: Mapped[str] = mapped_column(String(30), unique=True)
     password: Mapped[str] = mapped_column(String(30))
-    email: Mapped[EmailStr] = mapped_column(String(30))
-    title: Mapped[str] = mapped_column(String(450))
+    email: Mapped[EmailStr] = mapped_column(String(30), unique=True)
+    refresh_token: Mapped[str] = mapped_column(String(450))

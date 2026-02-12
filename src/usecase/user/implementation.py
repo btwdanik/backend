@@ -1,5 +1,5 @@
 from .abstract import AbstractCreateUserUC
-from api.pydantic.user.models import UserSchema
+from api.pydantic.user.models import UserSchema, UserSchemaLogin
 
 class PostgreSQLCreateUserUC(AbstractCreateUserUC):
     def __init__(self, uow):
@@ -10,12 +10,12 @@ class PostgreSQLCreateUserUC(AbstractCreateUserUC):
             user = await uow.repository.create_user(schema)
         return user
 
-    async def get(self, number: int):
+    async def login(self, schema: UserSchemaLogin):
         async with self._uow as uow:
-            user = await uow.repository.get_user(number)
+            user = await uow.repository.login_user(schema)
         return user
 
-    async def delete(self, number: int):
+    async def get(self, token: str):
         async with self._uow as uow:
-            user = await uow.repository.delete_user(number)
+            user = await uow.repository.get_user(token)
         return user

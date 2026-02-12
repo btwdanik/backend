@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from api.pydantic.user.models import UserSchema
+from api.pydantic.user.models import UserSchema, UserSchemaLogin
 
 
 class AbstractCreateUserUC(ABC):
@@ -7,8 +7,8 @@ class AbstractCreateUserUC(ABC):
     def create(self, schema: UserSchema):
         pass
     @abstractmethod
-    def get(self, number: int):
+    def login(self, schema: UserSchemaLogin):
         pass
     @abstractmethod
-    def delete(self, number: int):
+    def get(self, number: int):
         pass
