@@ -2,12 +2,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_, and_
 from starlette.responses import JSONResponse
 from fastapi import status
+from fastapi.security import OAuth2PasswordRequestForm
 
-from .utils import create_refresh_token, create_access_token, decode_token
+from infrastructure.repository.postgresql.utils.token import create_refresh_token, create_access_token, decode_token
 from api.pydantic.user.models import *
 from infrastructure.databases.postgresql.models.user import User
 
-# Работа с сессией/базой данных
 class PostgreSQLUserRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
@@ -26,7 +26,6 @@ class PostgreSQLUserRepository:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 content={"message": "User already exists"}
             )
-
         schema = UserSchemaRefreshToken(
             sub=payload.username,
         )
@@ -36,10 +35,8 @@ class PostgreSQLUserRepository:
             email=payload.email,
             refresh_token=create_refresh_token(schema),
         )
-
         self._session.add(user)
         await self._session.flush()
-
         response = UserSchemaResponse(
             id=user.id,
             username=user.username,
@@ -50,24 +47,23 @@ class PostgreSQLUserRepository:
             content=response.model_dump()
         )
 
-    async def login_user(self, payload: UserSchemaLogin) -> JSONResponse:
+
+    async def login_user(self, payload: OAuth2PasswordRequestForm) -> JSONResponse:
         schema = select(User).where(
             and_(
                 User.username == payload.username,
                 User.password == payload.password
             )
         )
-
         result = await self._session.execute(schema)
         user = result.scalar_one_or_none()
-
         if user is None:
             return JSONResponse(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 content={"message": "User not found"}
             )
         response = TokenAccessResponse(
-                access_token=create_access_token(UserSchemaAccessToken(sub=user.username)),
+                access_token=create_access_token(UserSchemaAccessToken(id=user.id, sub=user.username)),
                 token_type="bearer"
         )
         return JSONResponse(
@@ -77,12 +73,8 @@ class PostgreSQLUserRepository:
 
 
     async def get_user(self, token: str) -> JSONResponse:
-        payload = decode_token(token)
-        print(payload.get('sub'))
-        schema = select(User).where(User.username == payload.get('sub'))
-        result = await self._session.execute(schema)
-        user = result.scalar_one_or_none()
-
+        user_id = decode_token(token).get('id')
+        user: User | None = await self._session.get(User, user_id)
         content = UserSchemaResponse(
             id=user.id,
             username=user.username,
