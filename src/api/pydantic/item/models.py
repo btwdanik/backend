@@ -1,18 +1,10 @@
 from pydantic import BaseModel, Field, field_validator
-from enum import Enum
 from fastapi import HTTPException
 from typing import List
 
 class Pagination(BaseModel):
     limit: int = Field(10, le=100)
     offset: int = Field(0, ge=0)
-
-class Info(str, Enum):
-    items_info = 'Info of items'
-    item_id_info = 'Info of ID item'
-    item_create = 'Create item'
-    item_delete = 'Delete item'
-    item_put = 'Change an existing item with ID'
 
 categories: List[str] = ['Home', 'School', 'College']
 

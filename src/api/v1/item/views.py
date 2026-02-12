@@ -4,13 +4,14 @@ from typing import List
 
 
 from .dependencies import create_item_user_case
-from api.pydantic.item.models import Info, ItemSchema, ItemSchemaResponse, Pagination
+from api.pydantic.item.models import ItemSchema, ItemSchemaResponse, Pagination
 from usecase.item.implementation import PostgreSQLCreateItemUC
 
+#TODO: add user | another = Depends(current_active_user) in all endpoints
 
-router = APIRouter(prefix="/items")
+router = APIRouter(prefix="/items", tags=["Items"])
 
-@router.get("/{item_id}", tags=[Info.item_id_info], response_model=ItemSchemaResponse)
+@router.get("/{item_id}", response_model=ItemSchemaResponse)
 async def get_info_item_by_id(
         item_id: int,
         repo: PostgreSQLCreateItemUC = Depends(create_item_user_case)
@@ -23,7 +24,7 @@ async def get_info_item_by_id(
     return JSONResponse(status_code=status.HTTP_200_OK, content=item.model_dump())
 
 
-@router.get("", tags=[Info.items_info], response_model=List[ItemSchemaResponse])
+@router.get("", response_model=List[ItemSchemaResponse])
 async def get_info_items(
         pagination: Pagination = Depends(),
         repo: PostgreSQLCreateItemUC = Depends(create_item_user_case)
@@ -36,7 +37,7 @@ async def get_info_items(
     return JSONResponse(status_code=status.HTTP_200_OK, content=[item.model_dump() for item in items])
 
 
-@router.post("", tags=[Info.item_create], response_model=ItemSchemaResponse)
+@router.post("", response_model=ItemSchemaResponse)
 async def post_item(
         payload: ItemSchema,
         repo: PostgreSQLCreateItemUC = Depends(create_item_user_case),
@@ -49,7 +50,7 @@ async def post_item(
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=item.model_dump())
 
 
-@router.delete("/{item_id}", tags=[Info.item_delete])
+@router.delete("/{item_id}")
 async def delete_item(
         item_id : int,
         repo: PostgreSQLCreateItemUC = Depends(create_item_user_case)
@@ -62,10 +63,10 @@ async def delete_item(
     return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content=result)
 
 
-@router.put("/{item_id}", tags=[Info.item_put], response_model=ItemSchemaResponse)
+@router.put("/{item_id}", response_model=ItemSchemaResponse)
 async def put_item(item_id : int,
-             item: ItemSchema,
-             repo: PostgreSQLCreateItemUC = Depends(create_item_user_case)
+        item: ItemSchema,
+        repo: PostgreSQLCreateItemUC = Depends(create_item_user_case)
     ) -> JSONResponse:
 
     item = await repo.update(number=item_id, schema=item)
