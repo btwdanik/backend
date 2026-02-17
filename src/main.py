@@ -1,8 +1,12 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+
 from api.v1.routers import router
 from container import Container
+from web.router import router as web_router
 
 container = Container()
 
@@ -24,5 +28,10 @@ container.wire(
     ]
 )
 
+
+BASE_DIR = Path(__file__).resolve().parent
+
 main = FastAPI(tags=["api"], lifespan=lifespan)
 main.include_router(router)
+main.include_router(web_router)
+main.mount("/static", StaticFiles(directory="web/static"), name="static")
