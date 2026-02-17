@@ -1,0 +1,73 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #10131a;
+  color: #e8eefb;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 32px auto;
+}
+
+h1, h2, h3 { margin-top: 0; }
+.muted { color: #9caacc; }
+
+.card {
+  background: #181f2d;
+  border: 1px solid #26314a;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  gap: 10px;
+}
+
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid.four { grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; }
+
+@media (max-width: 900px) {
+  .grid.two, .grid.three, .grid.four { grid-template-columns: 1fr; }
+}
+
+input, select, textarea, button {
+  background: #121826;
+  color: inherit;
+  border: 1px solid #2d3b5b;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+button {
+  cursor: pointer;
+  background: #2f5bdb;
+  border-color: #2f5bdb;
+}
+
+button:hover { filter: brightness(1.08); }
+
+.token-box {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.actions { margin-top: 12px; }
+
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #111726;
+  border: 1px solid #293655;
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 110px;
+}
