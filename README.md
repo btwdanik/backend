@@ -1,4 +1,4 @@
-# OnlineStore
+# Backend
 
 A small backend-stack demo project built with **FastAPI**, **PostgreSQL**, and a **SQLAlchemy**.
 
