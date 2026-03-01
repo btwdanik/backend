@@ -13,3 +13,6 @@ class AbstractCreateUserUC(ABC):
     @abstractmethod
     def get(self, number: int):
         pass
+    @abstractmethod
+    def refresh(self, token: str):
+        pass

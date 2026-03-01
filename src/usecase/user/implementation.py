@@ -21,3 +21,8 @@ class PostgreSQLCreateUserUC(AbstractCreateUserUC):
         async with self._uow as uow:
             user = await uow.repository.get_user(token)
         return user
+
+    async def refresh(self, token: str):
+        async with self._uow as uow:
+            user = await uow.repository.refresh_user(token)
+        return user

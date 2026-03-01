@@ -31,10 +31,26 @@ def create_refresh_token(schema: UserSchemaRefreshToken) -> str:
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-def decode_token(token: str) -> dict | JSONResponse:
+def decode_access_token(token: str) -> dict | JSONResponse:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
+    except jwt.ExpiredSignatureError:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content="Token expired")
+    except jwt.InvalidTokenError:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content="Invalid token")
+
+def decode_expired_access_token(token: str) -> dict | JSONResponse:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM], options={"verify_exp": False})
+        return payload
+    except jwt.InvalidTokenError:
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content="Invalid token")
+
+def decode_refresh_token(token: str) -> bool | JSONResponse:
+    try:
+        jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return True
     except jwt.ExpiredSignatureError:
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content="Token expired")
     except jwt.InvalidTokenError:

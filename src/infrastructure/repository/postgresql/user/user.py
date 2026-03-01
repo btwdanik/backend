@@ -4,7 +4,7 @@ from starlette.responses import JSONResponse
 from fastapi import status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from infrastructure.utils.token import create_refresh_token, create_access_token, decode_token
+from infrastructure.utils.token import create_refresh_token, create_access_token, decode_access_token, decode_refresh_token, decode_expired_access_token
 from api.pydantic.user.models import *
 from infrastructure.databases.postgresql.models.user import User
 
@@ -59,9 +59,14 @@ class PostgreSQLUserRepository:
         user = result.scalar_one_or_none()
         if user is None:
             return JSONResponse(
-                status_code=status.HTTP_401_UNAUTHORIZED,
+                status_code=status.HTTP_404_NOT_FOUND,
                 content={"message": "User not found"}
             )
+        schema = UserSchemaRefreshToken(
+            sub=payload.username,
+        )
+        user.refresh_token = create_refresh_token(schema)
+        await self._session.flush()
         response = TokenAccessResponse(
                 access_token=create_access_token(UserSchemaAccessToken(id=user.id, sub=user.username)),
                 token_type="bearer"
@@ -73,7 +78,7 @@ class PostgreSQLUserRepository:
 
 
     async def get_user(self, token: str) -> JSONResponse:
-        result = decode_token(token)
+        result = decode_access_token(token)
         if isinstance(result, JSONResponse):
             return result
         user_id = result.get('id')
@@ -87,3 +92,26 @@ class PostgreSQLUserRepository:
             status_code=status.HTTP_200_OK,
             content=content.model_dump()
         )
+
+
+    async def refresh_user(self, token: str) -> JSONResponse:
+        result = decode_expired_access_token(token)
+        if isinstance(result, JSONResponse):
+            return result
+
+        user_id = result.get('id')
+        user: User | None = await self._session.get(User, user_id)
+        result_refresh = decode_refresh_token(user.refresh_token)
+        if isinstance(result_refresh, JSONResponse):
+            return result_refresh
+
+        response = TokenAccessResponse(
+            access_token=create_access_token(UserSchemaAccessToken(id=user.id, sub=user.username)),
+            token_type="bearer"
+        )
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content=response.model_dump()
+        )
+
+

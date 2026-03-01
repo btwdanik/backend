@@ -40,3 +40,12 @@ async def get_info_by_me(
 
     user = await repo.get(token)
     return user
+
+@router.get("/refresh", response_model=TokenAccessResponse)
+async def token_refresh(
+        token: str = Depends(oauth2_scheme),
+        repo: PostgreSQLCreateUserUC = Depends(create_user_user_case)
+    ) -> JSONResponse:
+
+    user = await repo.refresh(token)
+    return user

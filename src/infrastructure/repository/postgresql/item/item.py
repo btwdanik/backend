@@ -5,14 +5,14 @@ from starlette.responses import JSONResponse
 
 from api.pydantic.item.models import ItemSchema, ItemSchemaResponse
 from infrastructure.databases.postgresql.models.item import Item
-from infrastructure.utils.token import decode_token
+from infrastructure.utils.token import decode_access_token
 
 class PostgreSQLItemRepository:
     def __init__(self, session: AsyncSession):
         self._session = session
 
     async def create_item(self, schema: ItemSchema, token: str) -> JSONResponse:
-        user = decode_token(token)
+        user = decode_access_token(token)
         if isinstance(user, JSONResponse):
             return user
         user_id = user.get('id')
@@ -39,7 +39,7 @@ class PostgreSQLItemRepository:
 
 
     async def get_item(self, item_id: int, token: str) -> JSONResponse:
-        user = decode_token(token)
+        user = decode_access_token(token)
         if isinstance(user, JSONResponse):
             return user
         user_id = user.get('id')
@@ -57,7 +57,7 @@ class PostgreSQLItemRepository:
 
 
     async def get_items(self, *, limit: int = 100, offset: int = 0, token: str) -> JSONResponse:
-        user = decode_token(token)
+        user = decode_access_token(token)
         if isinstance(user, JSONResponse):
             return user
         user_id = user.get('id')
@@ -79,7 +79,7 @@ class PostgreSQLItemRepository:
 
 
     async def delete_item(self, item_id: int, token: str) -> JSONResponse:
-        user = decode_token(token)
+        user = decode_access_token(token)
         if isinstance(user, JSONResponse):
             return user
         user_id = user.get('id')
@@ -92,7 +92,7 @@ class PostgreSQLItemRepository:
 
 
     async def update_item(self, item_id: int, schema: ItemSchema, token: str) -> JSONResponse:
-        user = decode_token(token)
+        user = decode_access_token(token)
         if isinstance(user, JSONResponse):
             return user
         user_id = user.get('id')
