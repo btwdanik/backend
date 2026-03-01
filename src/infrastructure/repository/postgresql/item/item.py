@@ -5,7 +5,7 @@ from starlette.responses import JSONResponse
 
 from api.pydantic.item.models import ItemSchema, ItemSchemaResponse
 from infrastructure.databases.postgresql.models.item import Item
-from infrastructure.repository.postgresql.utils.token import decode_token
+from infrastructure.utils.token import decode_token
 
 class PostgreSQLItemRepository:
     def __init__(self, session: AsyncSession):

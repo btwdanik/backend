@@ -111,7 +111,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-src/infrastructure/repository/postgresql/utils/.env
+src/infrastructure/utils/.env
 config/config.yaml
 .venv
 env/

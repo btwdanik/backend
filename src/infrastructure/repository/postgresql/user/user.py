@@ -4,7 +4,7 @@ from starlette.responses import JSONResponse
 from fastapi import status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from infrastructure.repository.postgresql.utils.token import create_refresh_token, create_access_token, decode_token
+from infrastructure.utils.token import create_refresh_token, create_access_token, decode_token
 from api.pydantic.user.models import *
 from infrastructure.databases.postgresql.models.user import User
 
