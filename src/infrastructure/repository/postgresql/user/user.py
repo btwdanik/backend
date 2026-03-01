@@ -73,7 +73,10 @@ class PostgreSQLUserRepository:
 
 
     async def get_user(self, token: str) -> JSONResponse:
-        user_id = decode_token(token).get('id')
+        result = decode_token(token)
+        if isinstance(result, JSONResponse):
+            return result
+        user_id = result.get('id')
         user: User | None = await self._session.get(User, user_id)
         content = UserSchemaResponse(
             id=user.id,

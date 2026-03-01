@@ -12,7 +12,10 @@ class PostgreSQLItemRepository:
         self._session = session
 
     async def create_item(self, schema: ItemSchema, token: str) -> JSONResponse:
-        user_id = decode_token(token).get('id')
+        user = decode_token(token)
+        if isinstance(user, JSONResponse):
+            return user
+        user_id = user.get('id')
         item = Item(
             name=schema.name,
             category=schema.category,
@@ -36,7 +39,10 @@ class PostgreSQLItemRepository:
 
 
     async def get_item(self, item_id: int, token: str) -> JSONResponse:
-        user_id = decode_token(token).get('id')
+        user = decode_token(token)
+        if isinstance(user, JSONResponse):
+            return user
+        user_id = user.get('id')
         item: Item | None = await self._session.get(Item, item_id)
         if (item is not None) and (item.user_id == user_id):
             content = ItemSchemaResponse(
@@ -51,7 +57,10 @@ class PostgreSQLItemRepository:
 
 
     async def get_items(self, *, limit: int = 100, offset: int = 0, token: str) -> JSONResponse:
-        user_id = decode_token(token).get('id')
+        user = decode_token(token)
+        if isinstance(user, JSONResponse):
+            return user
+        user_id = user.get('id')
         content: List[ItemSchemaResponse] = []
         for i in range(offset + 1, offset + limit + 1):
             item: Item | None = await self._session.get(Item, i)
@@ -70,7 +79,10 @@ class PostgreSQLItemRepository:
 
 
     async def delete_item(self, item_id: int, token: str) -> JSONResponse:
-        user_id = decode_token(token).get('id')
+        user = decode_token(token)
+        if isinstance(user, JSONResponse):
+            return user
+        user_id = user.get('id')
         item = await self._session.get(Item, item_id)
         if (item is not None) and (item.user_id == user_id):
             await self._session.delete(item)
@@ -80,7 +92,10 @@ class PostgreSQLItemRepository:
 
 
     async def update_item(self, item_id: int, schema: ItemSchema, token: str) -> JSONResponse:
-        user_id = decode_token(token).get('id')
+        user = decode_token(token)
+        if isinstance(user, JSONResponse):
+            return user
+        user_id = user.get('id')
         item: Item | None = await self._session.get(Item, item_id)
         if (item is not None) and (item.user_id == user_id):
             new_item = Item(
