@@ -30,7 +30,7 @@ class DatabaseSessionManager:
             raise Exception("\033[31mERROR\033[0m:     DatabaseSessionManager is not initialized")
 
         # await self.delete_tables()
-        # print("INFO:    Tables deleted") # drop all base, when you leave
+        # print("\033[33mINFO\033[0m:     Tables deleted") # drop all base, when you leave
 
         await self._engine.dispose()
         self._engine = None

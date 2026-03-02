@@ -1,10 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, and_
+from sqlalchemy import select, or_
 from starlette.responses import JSONResponse
 from fastapi import status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from infrastructure.utils.token import create_refresh_token, create_access_token, decode_access_token, decode_refresh_token, decode_expired_access_token
+from infrastructure.utils.password import hash_password, validate_password
 from api.pydantic.user.models import *
 from infrastructure.databases.postgresql.models.user import User
 
@@ -31,7 +32,7 @@ class PostgreSQLUserRepository:
         )
         user = User(
             username=payload.username,
-            password=payload.password,
+            hashed_password=hash_password(payload.password),
             email=payload.email,
             refresh_token=create_refresh_token(schema),
         )
@@ -50,10 +51,7 @@ class PostgreSQLUserRepository:
 
     async def login_user(self, payload: OAuth2PasswordRequestForm) -> JSONResponse:
         schema = select(User).where(
-            and_(
-                User.username == payload.username,
-                User.password == payload.password
-            )
+            User.username == payload.username
         )
         result = await self._session.execute(schema)
         user = result.scalar_one_or_none()
@@ -62,6 +60,11 @@ class PostgreSQLUserRepository:
                 status_code=status.HTTP_404_NOT_FOUND,
                 content={"message": "User not found"}
             )
+        if not validate_password(
+            hashed_password=user.hashed_password,
+            password=payload.password
+        ):
+            return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"message": "Incorrect password"})
         schema = UserSchemaRefreshToken(
             sub=payload.username,
         )
