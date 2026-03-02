@@ -15,6 +15,7 @@ A small backend-stack demo project built with **FastAPI**, **PostgreSQL**, and a
 - `POST /api/v1/users/auth/register`
 - `POST /api/v1/users/auth/login`
 - `GET /api/v1/users/auth/me`
+- `GET /api/v1/users/auth/refresh`
 - `POST /api/v1/users/items`
 - `GET /api/v1/users/items`
 - `GET /api/v1/users/items/{item_id}`
