@@ -14,19 +14,20 @@ class DatabaseSessionManager:
         self._session = async_sessionmaker(autocommit=False, bind=self._engine, expire_on_commit=False)
 
         if self._session is None:
-            raise Exception("INFO:     DatabaseSessionManager is not initialized")
+            raise Exception("\033[32mINFO\033[0m:     DatabaseSessionManager is not initialized")
         else:
-            print('INFO:     DatabaseSessionManager is initialized')
-
             try:
                 await self.create_tables()
-                print("INFO:     Tables created")
+                print("\033[32mINFO\033[0m:     The connection was established")
+                print("\033[32mINFO\033[0m:     Tables created")
             except Exception:
-                raise Exception("Error, Tables creation failed")
+                print("\033[31mERROR\033[0m:     The connection was not established")
+                print("\033[31mERROR\033[0m:     Tables creation failed")
+                raise Exception("No connection")
 
     async def close(self) -> None:
         if self._engine is None:
-            raise Exception("INFO:     DatabaseSessionManager is not initialized")
+            raise Exception("\033[31mERROR\033[0m:     DatabaseSessionManager is not initialized")
 
         # await self.delete_tables()
         # print("INFO:    Tables deleted") # drop all base, when you leave
@@ -38,7 +39,7 @@ class DatabaseSessionManager:
     @asynccontextmanager
     async def connect(self) -> AsyncIterator[AsyncSession]:
         if self._engine is None:
-            raise Exception("INFO:     DatabaseSessionManager is not initialized")
+            raise Exception("\033[31mERROR\033[0m:     DatabaseSessionManager is not initialized")
 
         async with self._engine.begin() as conn:
             try:
@@ -50,7 +51,7 @@ class DatabaseSessionManager:
     @asynccontextmanager
     async def session(self) -> AsyncIterator[AsyncSession]:
         if self._session is None:
-            raise Exception("INFO:     DatabaseSessionManager is not initialized")
+            raise Exception("\033[31mERROR\033[0m:     DatabaseSessionManager is not initialized")
 
         async with self._session() as session:
             yield session
