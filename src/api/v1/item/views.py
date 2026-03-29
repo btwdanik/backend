@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends
 from typing import List
 
 from .dependencies import create_item_user_case, get_current_user
-from api.pydantic.item.models import ItemSchema, ItemSchemaResponse, Pagination
-from usecase.item.implementation import PostgreSQLCreateItemUC
+from src.api.pydantic.item.models import ItemSchema, ItemSchemaResponse, Pagination
+from src.usecase.item.implementation import PostgreSQLCreateItemUC
 
 router = APIRouter(prefix="/users/items", tags=["Items"])
 

@@ -1,10 +1,10 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from infrastructure.di.injection import build_user_uow
-from infrastructure.databases.postgresql.session.session import get_async_session
-from infrastructure.repository.postgresql.user.uow import PostgreSQLUserRepositoryUOW
-from usecase.user.implementation import PostgreSQLCreateUserUC
+from src.infrastructure.di.injection import build_user_uow
+from src.infrastructure.databases.postgresql.session.session import get_async_session
+from src.infrastructure.repository.postgresql.user.uow import PostgreSQLUserRepositoryUOW
+from src.usecase.user.implementation import PostgreSQLCreateUserUC
 
 def _user_user_case(session: AsyncSession = Depends(get_async_session)
 ) -> PostgreSQLUserRepositoryUOW:

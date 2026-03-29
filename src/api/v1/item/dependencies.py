@@ -1,11 +1,11 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.v1.user.views import oauth2_scheme
-from infrastructure.di.injection import build_item_uow
-from infrastructure.databases.postgresql.session.session import get_async_session
-from infrastructure.repository.postgresql.item.uow import PostgreSQLItemRepositoryUOW
-from usecase.item.implementation import PostgreSQLCreateItemUC
+from src.api.v1.user.views import oauth2_scheme
+from src.infrastructure.di.injection import build_item_uow
+from src.infrastructure.databases.postgresql.session.session import get_async_session
+from src.infrastructure.repository.postgresql.item.uow import PostgreSQLItemRepositoryUOW
+from src.usecase.item.implementation import PostgreSQLCreateItemUC
 
 # Реализация без UseCases
 def _item_user_case(session: AsyncSession = Depends(get_async_session)

@@ -4,9 +4,9 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import OAuth2PasswordRequestForm
 
 from .dependencies import create_user_user_case
-from api.pydantic.user.models import UserSchemaResponse, TokenAccessResponse
-from usecase.user.implementation import PostgreSQLCreateUserUC
-from api.pydantic.user.models import UserSchema
+from src.api.pydantic.user.models import UserSchemaResponse, TokenAccessResponse
+from src.usecase.user.implementation import PostgreSQLCreateUserUC
+from src.api.pydantic.user.models import UserSchema
 
 router = APIRouter(prefix="/users/auth", tags=["Users"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/users/auth/login")

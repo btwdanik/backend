@@ -3,8 +3,8 @@ from fastapi import Depends
 from typing import AsyncIterator
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from container import Container
-from infrastructure.databases.postgresql.session.sessionmanager import DatabaseSessionManager
+from src.container import Container
+from src.infrastructure.databases.postgresql.session.sessionmanager import DatabaseSessionManager
 
 @inject
 async def get_async_session(

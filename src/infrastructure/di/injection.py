@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from container import Container
-from infrastructure.repository.postgresql.item.uow import PostgreSQLItemRepositoryUOW
-from infrastructure.repository.postgresql.user.uow import PostgreSQLUserRepositoryUOW
+from src.container import Container
+from src.infrastructure.repository.postgresql.item.uow import PostgreSQLItemRepositoryUOW
+from src.infrastructure.repository.postgresql.user.uow import PostgreSQLUserRepositoryUOW
 
 # Самая начальная точка
 def build_item_uow(session: AsyncSession) -> PostgreSQLItemRepositoryUOW:

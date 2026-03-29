@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncEngine
-from infrastructure.databases.postgresql.session.base import Base
+from src.infrastructure.databases.postgresql.session.base import Base
 
 class DatabaseSessionManager:
     def __init__(self):

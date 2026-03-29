@@ -2,7 +2,7 @@ from pydantic import EmailStr
 from sqlalchemy import String, LargeBinary
 from sqlalchemy.orm import mapped_column, Mapped
 
-from infrastructure.databases.postgresql.session.base import Base
+from src.infrastructure.databases.postgresql.session.base import Base
 
 class User(Base):
     __tablename__ = "user"

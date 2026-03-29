@@ -1,5 +1,5 @@
 from .abstract import AbstractCreateItemUC
-from api.pydantic.item.models import ItemSchema
+from src.api.pydantic.item.models import ItemSchema
 
 class PostgreSQLCreateItemUC(AbstractCreateItemUC):
     def __init__(self, uow):

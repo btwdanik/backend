@@ -1,9 +1,9 @@
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Factory
 
-from infrastructure.databases.postgresql.session.sessionmanager import DatabaseSessionManager
-from infrastructure.repository.postgresql.item.uow import PostgreSQLItemRepositoryUOW
-from infrastructure.repository.postgresql.user.uow import PostgreSQLUserRepositoryUOW
+from src.infrastructure.databases.postgresql.session.sessionmanager import DatabaseSessionManager
+from src.infrastructure.repository.postgresql.item.uow import PostgreSQLItemRepositoryUOW
+from src.infrastructure.repository.postgresql.user.uow import PostgreSQLUserRepositoryUOW
 
 
 class Container(DeclarativeContainer):

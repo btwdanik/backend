@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from api.v1.routers import router
-from container import Container
-from settings import Settings
+from src.api.v1.routers import router
+from src.container import Container
+from src.settings import Settings
 
 container = Container()
 settings = Settings()
@@ -22,9 +22,9 @@ async def lifespan(app: FastAPI):
 
 container.wire(
     modules=[
-        "infrastructure.databases.postgresql.session.session",
-        "api.v1.item.dependencies",
-        "api.v1.user.dependencies"
+        "src.infrastructure.databases.postgresql.session.session",
+        "src.api.v1.item.dependencies",
+        "src.api.v1.user.dependencies"
     ]
 )
 

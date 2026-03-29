@@ -1,11 +1,11 @@
 from typing import List
 from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
-from api.pydantic.item.models import ItemSchema, ItemSchemaResponse
-from infrastructure.databases.postgresql.models.item import Item
-from infrastructure.utils.token import decode_access_token
+from src.api.pydantic.item.models import ItemSchema, ItemSchemaResponse
+from src.infrastructure.databases.postgresql.models.item import Item
+from src.infrastructure.utils.token import decode_access_token
 
 class PostgreSQLItemRepository:
     def __init__(self, session: AsyncSession):
@@ -33,7 +33,7 @@ class PostgreSQLItemRepository:
             price=item.price
         )
         return JSONResponse(
-            status_code=status.HTTP_200_OK,
+            status_code=status.HTTP_201_CREATED,
             content=content.model_dump()
         )
 
@@ -78,7 +78,7 @@ class PostgreSQLItemRepository:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": "Items not found"})
 
 
-    async def delete_item(self, item_id: int, token: str) -> JSONResponse:
+    async def delete_item(self, item_id: int, token: str) -> JSONResponse | Response:
         user = decode_access_token(token)
         if isinstance(user, JSONResponse):
             return user
@@ -87,7 +87,7 @@ class PostgreSQLItemRepository:
         if (item is not None) and (item.user_id == user_id):
             await self._session.delete(item)
             await self._session.flush()
-            return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Item deleted"})
+            return Response(status_code=status.HTTP_204_NO_CONTENT)
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": "Item not found"})
 
 
@@ -115,5 +115,5 @@ class PostgreSQLItemRepository:
                 count=item.count,
                 price=item.price
             )
-            return JSONResponse(status_code=status.HTTP_200_OK, content=content.model_dump())
+            return JSONResponse(status_code=status.HTTP_201_CREATED, content=content.model_dump())
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"message": "Item not found"})

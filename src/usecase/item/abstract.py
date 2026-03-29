@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from api.pydantic.item.models import ItemSchema
+from src.api.pydantic.item.models import ItemSchema
 
 class AbstractCreateItemUC(ABC):
     @abstractmethod

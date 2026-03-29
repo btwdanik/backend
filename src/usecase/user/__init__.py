@@ -1,1 +1,1 @@
-from usecase.user.abstract import AbstractCreateUserUC
+from src.usecase.user.abstract import AbstractCreateUserUC

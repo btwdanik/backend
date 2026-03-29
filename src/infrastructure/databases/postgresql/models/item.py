@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped
 
-from infrastructure.databases.postgresql.session.base import Base
+from src.infrastructure.databases.postgresql.session.base import Base
 
 class Item(Base):
     __tablename__ = "item"

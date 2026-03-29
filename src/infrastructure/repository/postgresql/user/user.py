@@ -1,13 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_
-from starlette.responses import JSONResponse
+from fastapi.responses import JSONResponse
 from fastapi import status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from infrastructure.utils.token import create_refresh_token, create_access_token, decode_access_token, decode_refresh_token, decode_expired_access_token
-from infrastructure.utils.password import hash_password, validate_password
-from api.pydantic.user.models import *
-from infrastructure.databases.postgresql.models.user import User
+from src.infrastructure.utils.token import create_refresh_token, create_access_token, decode_access_token, decode_refresh_token, decode_expired_access_token
+from src.infrastructure.utils.password import hash_password, validate_password
+from src.api.pydantic.user.models import *
+from src.infrastructure.databases.postgresql.models.user import User
 
 class PostgreSQLUserRepository:
     def __init__(self, session: AsyncSession):

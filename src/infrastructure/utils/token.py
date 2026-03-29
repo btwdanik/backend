@@ -3,7 +3,7 @@ import jwt, os
 from starlette.responses import JSONResponse
 from fastapi import status
 
-from api.pydantic.user.models import UserSchemaAccessToken, UserSchemaRefreshToken
+from src.api.pydantic.user.models import UserSchemaAccessToken, UserSchemaRefreshToken
 from dotenv import load_dotenv
 
 load_dotenv()

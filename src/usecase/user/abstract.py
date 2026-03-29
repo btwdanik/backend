@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from fastapi.security import OAuth2PasswordRequestForm
 
-from api.pydantic.user.models import UserSchema
+from src.api.pydantic.user.models import UserSchema
 
 class AbstractCreateUserUC(ABC):
     @abstractmethod
